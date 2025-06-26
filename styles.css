@@ -1024,7 +1024,8 @@ footer a:hover {
     flex-direction: column;
     gap: 4px;
     cursor: pointer;
-    z-index: 1003; 
+    z-index: 1003;
+    margin-right: 8px; 
 }
 
   .nav-toggle span {
