@@ -126,7 +126,7 @@ nav a:hover {
 
 
 .hero-bg {
-  background-image: url('/assets/banner1-resized.jpg');
+  background-image: url('assets/banner1-resized.jpg');
   background-size: cover; 
   background-position: center;
   background-repeat: no-repeat;
