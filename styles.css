@@ -541,6 +541,8 @@ nav a:hover {
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  touch-action: pan-y;         /* critical line for iOS */
+  -webkit-user-select: none;   /* avoid accidental text selection */
 }
 
 
