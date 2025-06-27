@@ -28,6 +28,31 @@ document.querySelectorAll('.beer-slider').forEach(slider => {
   });
 });
 
+
+document.addEventListener('DOMContentLoaded', () => {
+  [...document.querySelectorAll('.beer-slider')].forEach(slider => {
+    const handle = slider.querySelector('.beer-handle, .beer-range');
+    if (!handle) return;
+
+    ['touchstart','touchmove'].forEach(evtName => {
+      handle.addEventListener(evtName, e => {
+        const touch = e.touches[0];
+        if (touch) {
+          // Synthesize a mouse-event substitute for BeerSlider
+          const fakeEvt = new MouseEvent(evtName === 'touchstart' ? 'mousedown':'mousemove', {
+            bubbles: true,
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          e.preventDefault();          // stop native scrolling
+          handle.dispatchEvent(fakeEvt);
+        }
+      }, { passive:false });
+    });
+  });
+});
+
+
 // swiper init, for google reviews
 
 const swiper = new Swiper('.swiper', {

@@ -997,6 +997,7 @@ footer a:hover {
     flex-direction: column;
     padding: 1rem;
     gap: 10px;
+    padding-bottom: 0;
     box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 
 
@@ -1004,6 +1005,8 @@ footer a:hover {
 
 #navMenu.active {
     max-height: 400px; /* Adjust based on your menu's content */
+    padding: 1rem;
+
 }
 
 
