@@ -888,6 +888,63 @@ footer a:hover {
 }
 
 
+.ba-container {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 3px solid #fff;
+      touch-action: none; /* prevent scrolling conflict on iOS */
+      transition: none !important;
+    }
+
+    .ba-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .ba-img.after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      clip-path: inset(0 50% 0 0);
+      transition: none !important;
+    }
+
+    .ba-handle {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: 100%;
+      background-color: #fff;
+      transform: translateX(-50%);
+      z-index: 2;
+      transition: none !important;
+    }
+
+    .ba-label {
+      position: absolute;
+      top: 10px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 4px;
+      color: white;
+    }
+
+    .before-label { left: 10px; background: #ff4444; }
+    .after-label  { right: 10px; background: #4caf50; }
+
+
+
+
+
+
 
 @media (max-width: 1024px) {
 

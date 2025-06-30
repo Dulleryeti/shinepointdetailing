@@ -29,6 +29,43 @@ document.querySelectorAll('.beer-slider').forEach(slider => {
 });
 
 
+// window.addEventListener('DOMContentLoaded', function () {
+//   document.querySelectorAll('.cocoen').forEach(function (el) {
+//     new Cocoen(el); // ✅ this is the correct usage
+//   });
+// });
+
+  const container = document.getElementById('baSlider');
+  const afterImg = container.querySelector('.ba-img.after');
+  const handle = document.getElementById('baHandle');
+
+  const updateSlider = (x) => {
+    const rect = container.getBoundingClientRect();
+    let offsetX = x - rect.left;
+    offsetX = Math.max(0, Math.min(offsetX, rect.width));
+    const percent = (offsetX / rect.width) * 100;
+    handle.style.left = `${percent}%`;
+    afterImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+  };
+
+  const onMove = (e) => {
+    if (e.touches) updateSlider(e.touches[0].clientX);
+    else updateSlider(e.clientX);
+  };
+
+  let dragging = false;
+
+  container.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    updateSlider(e.clientX);
+  });
+
+  window.addEventListener('pointermove', (e) => {
+    if (dragging) onMove(e);
+  });
+
+  window.addEventListener('pointerup', () => dragging = false);
+
 
 
 
