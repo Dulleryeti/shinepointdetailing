@@ -47,7 +47,6 @@ document.querySelectorAll('.ba-container').forEach((container) => {
     handle.style.left = `${percent}%`;
     afterImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
 
-    // Hide labels based on slider position
     if (percent <= 5) {
       beforeLabel.style.opacity = '0';
     } else {
@@ -71,7 +70,7 @@ document.querySelectorAll('.ba-container').forEach((container) => {
   const stopDragging = () => {
     dragging = false;
     thumb.classList.remove('dragging');
-    container.releasePointerCapture(e.pointerId); // Release pointer capture
+ 
     container.removeEventListener('pointermove', onMove); // Remove pointermove listener
     container.removeEventListener('pointerup', stopDragging); // Remove pointerup listener
   };
