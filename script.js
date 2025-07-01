@@ -31,44 +31,45 @@ document.querySelectorAll('.beer-slider').forEach(slider => {
 
 document.querySelectorAll('.ba-container').forEach((container) => {
   const afterImg = container.querySelector('.ba-img.after');
-  const handle = container.querySelector('.ba-handle');
+  const handle = container.querySelector('.ba-handle'); // Scoped to the container
   const thumb = handle.querySelector('.ba-thumb');
   const beforeLabel = container.querySelector('.before-label');
   const afterLabel = container.querySelector('.after-label');
 
-  let dragging = false;
-  let activeContainer = null; // Track the active container
+  let activeContainer = null;
 
   const updateSlider = (x) => {
-    const rect = activeContainer.getBoundingClientRect();
+    const rect = container.getBoundingClientRect();
     let offsetX = x - rect.left;
     offsetX = Math.max(0, Math.min(offsetX, rect.width));
     const percent = (offsetX / rect.width) * 100;
+    handle.style.left = `${percent}%`;
+    afterImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+
 
     const handle = activeContainer.querySelector('.ba-handle');
     const afterImg = activeContainer.querySelector('.ba-img.after');
     const beforeLabel = activeContainer.querySelector('.before-label');
     const afterLabel = activeContainer.querySelector('.after-label');
 
-    handle.style.left = `${percent}%`;
-    afterImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
 
-    // Hide labels based on slider position
     if (percent <= 5) {
-      beforeLabel.style.opacity = '0';
+      beforeLabel.style.opacity = '0'; // Hide "Before" label
     } else {
-      beforeLabel.style.opacity = '1';
+      beforeLabel.style.opacity = '1'; // Show "Before" label
     }
 
     if (percent >= 95) {
-      afterLabel.style.opacity = '0';
+      afterLabel.style.opacity = '0'; // Hide "After" label
     } else {
-      afterLabel.style.opacity = '1';
+      afterLabel.style.opacity = '1'; // Show "After" label
     }
   };
 
+  let dragging = false;
+
   const onMove = (e) => {
-    if (dragging && activeContainer) {
+    if (dragging) {
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       updateSlider(clientX);
     }
@@ -76,31 +77,39 @@ document.querySelectorAll('.ba-container').forEach((container) => {
 
   const stopDragging = () => {
     dragging = false;
-    if (activeContainer) {
-      const thumb = activeContainer.querySelector('.ba-thumb');
-      thumb.classList.remove('dragging');
-    }
-    activeContainer = null; // Reset active container
-    window.removeEventListener('pointermove', onMove); // Remove global pointermove listener
-    window.removeEventListener('pointerup', stopDragging); // Remove global pointerup listener
+    thumb.classList.remove('dragging');
+    container.removeEventListener('pointermove', onMove); 
   };
 
   container.addEventListener('pointerdown', (e) => {
-    if (e.buttons === 1 || e.type === 'touchstart') { // Ensure left mouse button or touch
+    if (e.buttons === 1 || e.type === 'touchstart') { 
       dragging = true;
-      activeContainer = container; // Set the active container
-      const thumb = container.querySelector('.ba-thumb');
       thumb.classList.add('dragging');
       updateSlider(e.clientX || e.touches[0].clientX);
-      window.addEventListener('pointermove', onMove); // Add global pointermove listener
-      window.addEventListener('pointerup', stopDragging); // Add global pointerup listener
+      container.addEventListener('pointermove', onMove); 
       e.preventDefault();
     }
   });
 
+  container.addEventListener('pointerup', (e) => {
+    stopDragging();
+    e.preventDefault(); 
+  });
+
+  container.addEventListener('pointerleave', (e) => {
+    e.preventDefault(); 
+  });
+
+  container.addEventListener('pointermove', (e) => {
+    if (e.buttons !== 1) { 
+      stopDragging();
+    }
+    onMove(e);
+  });
+
   container.querySelectorAll('.ba-img').forEach(img => {
     img.addEventListener('dragstart', (e) => {
-      e.preventDefault(); // Prevent dragging
+      e.preventDefault(); 
     });
   });
 });
