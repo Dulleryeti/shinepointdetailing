@@ -72,7 +72,8 @@ document.querySelectorAll('.ba-container').forEach((container) => {
   const stopDragging = () => {
     dragging = false;
     thumb.classList.remove('dragging');
-    container.removeEventListener('pointermove', onMove); 
+    document.removeEventListener('pointermove', onMove); // Remove pointermove listener
+    document.removeEventListener('pointerup', stopDragging); // Remove pointerup listener
   };
 
   container.addEventListener('pointerdown', (e) => {
@@ -80,7 +81,8 @@ document.querySelectorAll('.ba-container').forEach((container) => {
       dragging = true;
       thumb.classList.add('dragging');
       updateSlider(e.clientX || e.touches[0].clientX);
-      container.addEventListener('pointermove', onMove); // Add pointermove 
+      document.addEventListener('pointermove', onMove); // Attach pointermove listener to document
+      document.addEventListener('pointerup', stopDragging); // Attach pointerup listener to document
       e.preventDefault();
     }
   });
