@@ -47,12 +47,6 @@ document.querySelectorAll('.ba-container').forEach((container) => {
     afterImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
 
 
-    const handle = activeContainer.querySelector('.ba-handle');
-    const afterImg = activeContainer.querySelector('.ba-img.after');
-    const beforeLabel = activeContainer.querySelector('.before-label');
-    const afterLabel = activeContainer.querySelector('.after-label');
-
-
     if (percent <= 5) {
       beforeLabel.style.opacity = '0'; // Hide "Before" label
     } else {
@@ -86,7 +80,7 @@ document.querySelectorAll('.ba-container').forEach((container) => {
       dragging = true;
       thumb.classList.add('dragging');
       updateSlider(e.clientX || e.touches[0].clientX);
-      container.addEventListener('pointermove', onMove); 
+      container.addEventListener('pointermove', onMove); // Add pointermove 
       e.preventDefault();
     }
   });
