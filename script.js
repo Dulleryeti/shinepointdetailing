@@ -83,7 +83,7 @@ document.querySelectorAll('.ba-container').forEach((container) => {
     }
   });
 
-  window.addEventListener('pointerup', (e) => {
+  container.addEventListener('pointerup', (e) => {
     stopDragging();
     e.preventDefault(); 
   });
@@ -92,7 +92,7 @@ document.querySelectorAll('.ba-container').forEach((container) => {
     e.preventDefault(); 
   });
 
-  window.addEventListener('pointermove', (e) => {
+  container.addEventListener('pointermove', (e) => {
     if (e.buttons !== 1) { 
       stopDragging();
     }
