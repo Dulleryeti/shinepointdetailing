@@ -37,18 +37,12 @@ document.querySelectorAll('.ba-container').forEach((container) => {
   const afterLabel = container.querySelector('.after-label');
 
   let dragging = false;
-  let activeContainer = null; // Track the active container
 
   const updateSlider = (x) => {
-    const rect = activeContainer.getBoundingClientRect();
+    const rect = container.getBoundingClientRect();
     let offsetX = x - rect.left;
     offsetX = Math.max(0, Math.min(offsetX, rect.width));
     const percent = (offsetX / rect.width) * 100;
-
-    const handle = activeContainer.querySelector('.ba-handle');
-    const afterImg = activeContainer.querySelector('.ba-img.after');
-    const beforeLabel = activeContainer.querySelector('.before-label');
-    const afterLabel = activeContainer.querySelector('.after-label');
 
     handle.style.left = `${percent}%`;
     afterImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
@@ -68,7 +62,7 @@ document.querySelectorAll('.ba-container').forEach((container) => {
   };
 
   const onMove = (e) => {
-    if (dragging && activeContainer) {
+    if (dragging) {
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       updateSlider(clientX);
     }
@@ -76,31 +70,27 @@ document.querySelectorAll('.ba-container').forEach((container) => {
 
   const stopDragging = () => {
     dragging = false;
-    if (activeContainer) {
-      const thumb = activeContainer.querySelector('.ba-thumb');
-      thumb.classList.remove('dragging');
-    }
-    activeContainer = null; 
-    document.removeEventListener('pointermove', onMove); 
-    document.removeEventListener('pointerup', stopDragging); 
+    thumb.classList.remove('dragging');
+    container.releasePointerCapture(e.pointerId); // Release pointer capture
+    container.removeEventListener('pointermove', onMove); // Remove pointermove listener
+    container.removeEventListener('pointerup', stopDragging); // Remove pointerup listener
   };
 
   container.addEventListener('pointerdown', (e) => {
     if (e.buttons === 1 || e.type === 'touchstart') { // Ensure left mouse button or touch
       dragging = true;
-      activeContainer = container; // Set the active container
-      const thumb = container.querySelector('.ba-thumb');
       thumb.classList.add('dragging');
       updateSlider(e.clientX || e.touches[0].clientX);
-      document.addEventListener('pointermove', onMove); // Add global pointermove listener
-      document.addEventListener('pointerup', stopDragging); // Add global pointerup listener
+      container.setPointerCapture(e.pointerId); // Capture pointer events for the container
+      container.addEventListener('pointermove', onMove); // Attach pointermove listener to the container
+      container.addEventListener('pointerup', stopDragging); // Attach pointerup listener to the container
       e.preventDefault();
     }
   });
 
   container.querySelectorAll('.ba-img').forEach(img => {
     img.addEventListener('dragstart', (e) => {
-      e.preventDefault(); 
+      e.preventDefault(); // Prevent dragging
     });
   });
 });
