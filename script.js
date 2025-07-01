@@ -92,7 +92,7 @@ document.querySelectorAll('.ba-container').forEach((container) => {
     e.preventDefault(); 
   });
 
-  container.addEventListener('pointermove', (e) => {
+  window.addEventListener('pointermove', (e) => {
     if (e.buttons !== 1) { 
       stopDragging();
     }
