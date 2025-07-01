@@ -545,7 +545,7 @@ nav a:hover {
   -webkit-user-select: none; /* Avoid accidental text selection */
   transition: none !important;
   cursor: ew-resize;
-  border-radius: 10px;
+  border-radius: 8px;
 
 }
 
