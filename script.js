@@ -69,15 +69,17 @@ document.querySelectorAll('.ba-container').forEach((container) => {
 
   const stopDragging = () => {
     dragging = false;
-    thumb.classList.remove('dragging'); 
+    thumb.classList.remove('dragging');
+    container.removeEventListener('pointermove', onMove); 
   };
 
   container.addEventListener('pointerdown', (e) => {
-    if (e.buttons === 1) { 
+    if (e.buttons === 1 || e.type === 'touchstart') { // Ensure left mouse button or touch
       dragging = true;
-      thumb.classList.add('dragging'); // Add the dragging class
-      updateSlider(e.clientX);
-      e.preventDefault(); // Prevent default behavior
+      thumb.classList.add('dragging');
+      updateSlider(e.clientX || e.touches[0].clientX);
+      container.addEventListener('pointermove', onMove); // Add pointermove listener
+      e.preventDefault();
     }
   });
 
