@@ -29,15 +29,12 @@ document.querySelectorAll('.beer-slider').forEach(slider => {
 });
 
 
-// window.addEventListener('DOMContentLoaded', function () {
-//   document.querySelectorAll('.cocoen').forEach(function (el) {
-//     new Cocoen(el); // ✅ this is the correct usage
-//   });
-// });
-
-  const container = document.getElementById('baSlider');
+document.querySelectorAll('.ba-container').forEach((container) => {
   const afterImg = container.querySelector('.ba-img.after');
-  const handle = document.getElementById('baHandle');
+  const handle = container.querySelector('.ba-handle'); // Scoped to the container
+  const thumb = handle.querySelector('.ba-thumb');
+  const beforeLabel = container.querySelector('.before-label');
+  const afterLabel = container.querySelector('.after-label');
 
   const updateSlider = (x) => {
     const rect = container.getBoundingClientRect();
@@ -46,25 +43,70 @@ document.querySelectorAll('.beer-slider').forEach(slider => {
     const percent = (offsetX / rect.width) * 100;
     handle.style.left = `${percent}%`;
     afterImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
-  };
 
-  const onMove = (e) => {
-    if (e.touches) updateSlider(e.touches[0].clientX);
-    else updateSlider(e.clientX);
+
+    if (percent <= 5) {
+      beforeLabel.style.opacity = '0'; // Hide "Before" label
+    } else {
+      beforeLabel.style.opacity = '1'; // Show "Before" label
+    }
+
+    if (percent >= 95) {
+      afterLabel.style.opacity = '0'; // Hide "After" label
+    } else {
+      afterLabel.style.opacity = '1'; // Show "After" label
+    }
   };
 
   let dragging = false;
 
+  const onMove = (e) => {
+    if (dragging) {
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      updateSlider(clientX);
+    }
+  };
+
+  const stopDragging = () => {
+    dragging = false;
+    thumb.classList.remove('dragging'); 
+  };
+
   container.addEventListener('pointerdown', (e) => {
-    dragging = true;
-    updateSlider(e.clientX);
+    if (e.buttons === 1) { 
+      dragging = true;
+      thumb.classList.add('dragging'); // Add the dragging class
+      updateSlider(e.clientX);
+      e.preventDefault(); // Prevent default behavior
+    }
+  });
+
+  window.addEventListener('pointerup', (e) => {
+    stopDragging();
+    e.preventDefault(); 
+  });
+
+  container.addEventListener('pointerleave', (e) => {
+    e.preventDefault(); 
   });
 
   window.addEventListener('pointermove', (e) => {
-    if (dragging) onMove(e);
+    if (e.buttons !== 1) { 
+      stopDragging();
+    }
+    onMove(e);
   });
 
-  window.addEventListener('pointerup', () => dragging = false);
+  container.querySelectorAll('.ba-img').forEach(img => {
+    img.addEventListener('dragstart', (e) => {
+      e.preventDefault(); 
+    });
+  });
+});
+
+
+
+
 
 
 
